@@ -1,5 +1,5 @@
-from flask import Flask, request
-from iebank_api import db, app
+from flask import request
+from iebank_api import app, db
 from iebank_api.models import Account
 
 @app.route('/')
@@ -21,12 +21,12 @@ def skull():
         text = text +'<br/>Database password:' + db.engine.url.password
     return text
 
-
 @app.route('/accounts', methods=['POST'])
 def create_account():
     name = request.json['name']
     currency = request.json['currency']
-    account = Account(name, currency)
+    country = request.json['country']
+    account = Account(name, currency, country)
     db.session.add(account)
     db.session.commit()
     return format_account(account)
@@ -45,6 +45,8 @@ def get_account(id):
 def update_account(id):
     account = Account.query.get(id)
     account.name = request.json['name']
+    if 'country' in request.json:
+        account.country = request.json['country']
     db.session.commit()
     return format_account(account)
 
@@ -62,6 +64,7 @@ def format_account(account):
         'account_number': account.account_number,
         'balance': account.balance,
         'currency': account.currency,
+        'country': account.country,
         'status': account.status,
         'created_at': account.created_at
     }
