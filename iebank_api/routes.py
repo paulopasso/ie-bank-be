@@ -44,11 +44,16 @@ def get_account(id):
 @app.route('/accounts/<int:id>', methods=['PUT'])
 def update_account(id):
     account = Account.query.get(id)
+    if not account:
+        return {"error": "Account not found"}, 404  # Return a 404 if the account doesn't exist
+    if not request.json or 'name' not in request.json:
+        return {"error": "Invalid request, 'name' is required"}, 400  # Return a 400 for invalid requests
     account.name = request.json['name']
     if 'country' in request.json:
         account.country = request.json['country']
     db.session.commit()
-    return format_account(account)
+    return format_account(account), 200
+
 
 @app.route('/accounts/<int:id>', methods=['DELETE'])
 def delete_account(id):
