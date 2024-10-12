@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_migrate import Migrate  # Import Flask-Migrate
 from dotenv import load_dotenv
 import os
 
@@ -23,6 +24,9 @@ else:
     app.config.from_object('config.ProductionConfig')
 
 db = SQLAlchemy(app)
+
+# Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 from iebank_api.models import Account
 

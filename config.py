@@ -9,13 +9,7 @@ class Config(object):
 
 class LocalConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///local.db'
-    # SQLALCHEMY_DATABASE_URI = 'postgresql://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
-    # dbuser=os.getenv('DBUSER'),
-    # dbpass=os.getenv('DBPASS'),
-    # dbhost=os.getenv('DBHOST'),
-    # dbname=os.getenv('DBNAME')
-    # )
-    # DEBUG = True
+    DEBUG = True
 
 class GithubCIConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
