@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_migrate import Migrate  # Import Flask-Migrate
 from dotenv import load_dotenv
 import os
 
@@ -20,6 +21,9 @@ if os.getenv('ENV') == 'local':
 elif os.getenv('ENV') == 'dev':
     print("Running in development mode")
     app.config.from_object('config.DevelopmentConfig')
+elif os.getenv('ENV') == 'UAT':
+    print("Running in UAT mode")
+    app.config.from_object('config.UATConfig')
 elif os.getenv('ENV') == 'ghci':
     print("Running in github mode")
     app.config.from_object('config.GithubCIConfig')
@@ -28,6 +32,9 @@ else:
     app.config.from_object('config.DevelopmentConfig')  # Changed from ProductionConfig since it doesn't exist
 
 db = SQLAlchemy(app)
+
+# Initialize Flask-Migrate
+migrate = Migrate(app, db)
 
 from iebank_api.models import Account
 
